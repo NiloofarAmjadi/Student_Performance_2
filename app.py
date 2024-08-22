@@ -11,12 +11,28 @@ model = pickle.load(open(filename, 'rb'))    # load the model
 def index():
     return render_template('index.html')
 
+
 @app.route('/predict', methods=['POST'])
 def predict():
-    data = request.json
-    df = pd.DataFrame(data, index=[0])
+    # Collect data from form submission
+    math_score = request.form['math']
+    reading_score = request.form['reading']
+    writing_score = request.form['writing']
+
+    # Create a DataFrame
+    data = {
+        'math score': [math_score],
+        'reading score': [reading_score],
+        'writing score': [writing_score]
+    }
+    df = pd.DataFrame(data)
+
+    # Make prediction
     prediction = model.predict(df)
-    return jsonify({'race/ethnicity': prediction[0]})
+
+    # Return the result
+    return render_template('index.html', predict=prediction[0])
+
 
 # Run the app
 if __name__ == "__main__":
