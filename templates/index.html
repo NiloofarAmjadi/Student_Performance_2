@@ -1,0 +1,33 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Student Performance Predictor</title>
+</head>
+<body>
+    <h1>Predict Student Race/Ethnicity</h1>
+    <form id="predictForm">
+        Math Score: <input type="number" id="math" required><br>
+        Reading Score: <input type="number" id="reading" required><br>
+        Writing Score: <input type="number" id="writing" required><br>
+        <button type="button" onclick="predict()">Predict</button>
+    </form>
+    <div id="result"></div>
+    <script>
+        function predict() {
+            const math = document.getElementById('math').value;
+            const reading = document.getElementById('reading').value;
+            const writing = document.getElementById('writing').value;
+
+            fetch('/predict', {
+                method: 'POST',
+                headers: {'Content-Type': 'application/json'},
+                body: JSON.stringify({math_score: math, reading_score: reading, writing_score: writing})
+            })
+            .then(response => response.json())
+            .then(data => {
+                document.getElementById('result').innerText = 'Predicted Race/Ethnicity: ' + data['race/ethnicity'];
+            });
+        }
+    </script>
+</body>
+</html>
