@@ -1,33 +1,76 @@
 <!DOCTYPE html>
-<html>
+<html lang="en">
 <head>
-    <title>Student Performance Predictor</title>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Student Race/Ethnicity Predictor</title>
+    <style>
+        /* Center the container in the middle of the screen */
+        .container {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            height: 100vh;
+            margin: 0 auto;
+            text-align: center;
+            max-width: 500px;
+        }
+
+        /* Style for each row */
+        .form-group {
+            margin-bottom: 15px;
+            width: 100%;
+        }
+
+        /* Full width for input */
+        input[type="number"] {
+            width: 100%;
+            padding: 8px;
+            font-size: 16px;
+            box-sizing: border-box;
+        }
+
+        /* Style the predict button */
+        button[type="submit"] {
+            background-color: #4CAF50;
+            color: white;
+            padding: 10px 20px;
+            font-size: 16px;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        /* Prediction result style */
+        #result {
+            font-size: 24px;
+            font-weight: bold;
+            color: #333;
+            margin-top: 20px;
+        }
+    </style>
 </head>
 <body>
-    <h1>Predict Student Race/Ethnicity</h1>
-    <form id="predictForm">
-        Math Score: <input type="number" id="math" required><br>
-        Reading Score: <input type="number" id="reading" required><br>
-        Writing Score: <input type="number" id="writing" required><br>
-        <button type="button" onclick="predict()">Predict</button>
-    </form>
-    <div id="result"></div>
-    <script>
-        function predict() {
-            const math = document.getElementById('math').value;
-            const reading = document.getElementById('reading').value;
-            const writing = document.getElementById('writing').value;
-
-            fetch('/predict', {
-                method: 'POST',
-                headers: {'Content-Type': 'application/json'},
-                body: JSON.stringify({math_score: math, reading_score: reading, writing_score: writing})
-            })
-            .then(response => response.json())
-            .then(data => {
-                document.getElementById('result').innerText = 'Predicted Race/Ethnicity: ' + data['race/ethnicity'];
-            });
-        }
-    </script>
+    <div class="container">
+        <h1>Student Race/Ethnicity Predictor</h1>
+        <p>Enter math, reading, and writing scores (between 0-100) and get predicted race/ethnicity.</p>
+        <form action="/predict" method="post">
+            <div class="form-group">
+                <label for="math">Math score:</label>
+                <input type="number" id="math" name="math" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="reading">Reading score:</label>
+                <input type="number" id="reading" name="reading" min="0" max="100" required>
+            </div>
+            <div class="form-group">
+                <label for="writing">Writing score:</label>
+                <input type="number" id="writing" name="writing" min="0" max="100" required>
+            </div>
+            <button type="submit">Predict</button>
+        </form>
+        <div id="result">My prediction: {{ predict }}</div>
+    </div>
 </body>
 </html>
